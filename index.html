@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마스의 캐릭터 라운지</title>
+    <style>
+        /* 기본 배경 및 폰트 */
+        body {
+            font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #f4f7fb;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* 헤더 영역 */
+        .site-header {
+            background-color: #ffffff;
+            padding: 140px 20px;
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .site-header h1 {
+            margin: 0 0 20px 0;
+            color: #4a7bb2;
+            font-size: 3rem;
+            letter-spacing: 1px;
+            font-weight: 900;
+        }
+
+        .site-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* 📌 모바일 화면을 위한 반응형 스타일 (화면이 768px보다 작아질 때 적용) */
+        @media (max-width: 768px) {
+            .site-header {
+                padding: 80px 20px; /* 모바일에선 위아래 여백을 줄임 */
+            }
+            .site-header h1 {
+                font-size: 2rem; /* 제목 크기도 폰에 맞게 작게 */
+            }
+            .site-header p {
+                font-size: 1rem;
+            }
+            .search-container {
+                margin: -20px auto 30px auto !important; /* 검색창 위치 조정 */
+            }
+            .character-gallery {
+                padding: 0 15px 40px 15px !important;
+                gap: 20px !important; /* 카드 사이 간격도 줄임 */
+            }
+        }
+
+        /* 검색창 영역 */
+        .search-container {
+            max-width: 500px;
+            margin: -25px auto 50px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 16px rgba(74, 123, 178, 0.08);
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #4a7bb2;
+            box-shadow: 0 8px 20px rgba(74, 123, 178, 0.2);
+        }
+
+        /* 갤러리 영역 */
+        .character-gallery {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 35px;
+            padding: 0 20px 40px 20px;
+        }
+
+        /* 캐릭터 카드 */
+        .character-card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(74, 123, 178, 0.06);
+            border: 2px solid #ffffff;
+            transition: all 0.3s ease;
+            display: none; /* 📌 자바스크립트로 제어하기 위해 일단 전부 숨김 처리 */
+        }
+
+        .character-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(74, 123, 178, 0.15);
+            border-color: #e2e8f0;
+        }
+
+        .character-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /* 1080x1620 썸네일 */
+        .image-placeholder {
+            width: 100%;
+            aspect-ratio: 1080 / 1620;
+            background-color: #eef2f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        /* 카드 정보 */
+        .card-info {
+            padding: 24px 20px;
+            text-align: center;
+        }
+
+        .card-info h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            color: #334155;
+            font-weight: 800;
+        }
+
+        .card-info p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #64748b;
+            background-color: #f1f5f9;
+            padding: 8px 15px;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 📌 더보기 버튼 스타일 */
+        .load-more-container {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .load-more-btn {
+            background-color: #4a7bb2;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(74, 123, 178, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .load-more-btn:hover {
+            background-color: #3b6392;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(74, 123, 178, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <h1>✨ 마스의 캐릭터 라운지 ✨</h1>
+        <p>제가 만든 다양한 세계관과 매력적인 캐릭터들을 모아둔 공간입니다.<br>썸네일을 클릭하면 상세 프로필을 확인할 수 있어요!</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="search-bar" class="search-input" placeholder="캐릭터 이름이나 키워드를 검색해보세요!">
+    </div>
+
+    <main class="character-gallery" id="character-gallery">
+        
+        <div class="character-card">
+            <a href="character_01.html">
+                <div class="image-placeholder">IMG 1</div>
+                <div class="card-info">
+                    <h2>츤데레 암살자</h2>
+                    <p>쌀쌀맞지만 은근히 챙겨주는 성격</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_02.html">
+                <div class="image-placeholder">IMG 2</div>
+                <div class="card-info">
+                    <h2>허당 마법사</h2>
+                    <p>주문은 잘 외우는데 자꾸 넘어짐</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_03.html">
+                <div class="image-placeholder">IMG 3</div>
+                <div class="card-info">
+                    <h2>눈을 가린 사제</h2>
+                    <p>성스러운 제복과 붕대의 묘한 조화</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_04.html">
+                <div class="image-placeholder">IMG 4</div>
+                <div class="card-info">
+                    <h2>드래곤 용병</h2>
+                    <p>커다란 뿔을 감추고 다니는 떠돌이</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_05.html">
+                <div class="image-placeholder">IMG 5</div>
+                <div class="card-info">
+                    <h2>평화 펜션 관리인</h2>
+                    <p>수상한 손님들을 맞이하는 사장님</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_06.html">
+                <div class="image-placeholder">IMG 6</div>
+                <div class="card-info">
+                    <h2>폐허 속 생존자</h2>
+                    <p>포스트 아포칼립스 도시의 방랑자</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_07.html">
+                <div class="image-placeholder">IMG 7</div>
+                <div class="card-info">
+                    <h2>비밀 정보상</h2>
+                    <p>뒷골목에서 소문을 파는 남자</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_08.html">
+                <div class="image-placeholder">IMG 8</div>
+                <div class="card-info">
+                    <h2>다정한 의사</h2>
+                    <p>누구에게나 친절한 마을 선생님</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_09.html">
+                <div class="image-placeholder">IMG 9</div>
+                <div class="card-info">
+                    <h2>덜렁대는 해커</h2>
+                    <p>코딩은 천재지만 일상생활은 제로</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_10.html">
+                <div class="image-placeholder">IMG 10</div>
+                <div class="card-info">
+                    <h2>차가운 안드로이드</h2>
+                    <p>감정을 배우기 시작한 로봇</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_11.html">
+                <div class="image-placeholder">IMG 11</div>
+                <div class="card-info">
+                    <h2>수수께끼 전학생</h2>
+                    <p>전학 온 첫날부터 비밀이 많은 아이</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="character-card">
+            <a href="character_12.html">
+                <div class="image-placeholder">IMG 12</div>
+                <div class="card-info">
+                    <h2>마지막 기사</h2>
+                    <p>망해버린 왕국을 홀로 지키는 자</p>
+                </div>
+            </a>
+        </div>
+
+    </main>
+
+    <div class="load-more-container" id="load-more-container">
+        <button class="load-more-btn" id="load-more-btn">더보기 ⏷</button>
+    </div>
+
+    <script>
+        const searchBar = document.getElementById('search-bar');
+        const cards = Array.from(document.querySelectorAll('.character-card')); // 배열로 변환
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        const loadMoreContainer = document.getElementById('load-more-container');
+        
+        let visibleCount = 8; // 처음에 보여줄 카드 개수 세팅
+
+        // 화면에 맞게 카드 보여주거나 숨기는 함수
+        function updateGallery() {
+            cards.forEach((card, index) => {
+                if (index < visibleCount) {
+                    card.style.display = 'block'; // 세팅된 개수까지만 보여줌
+                } else {
+                    card.style.display = 'none'; // 나머지는 숨김
+                }
+            });
+
+            // 보여줄 카드가 전체 카드 수보다 많거나 같으면 더보기 버튼 숨기기
+            if (visibleCount >= cards.length) {
+                loadMoreContainer.style.display = 'none';
+            } else {
+                loadMoreContainer.style.display = 'block';
+            }
+        }
+
+        // 처음에 함수 한 번 실행해서 8개만 띄우기
+        updateGallery();
+
+        // 더보기 버튼 눌렀을 때
+        loadMoreBtn.addEventListener('click', () => {
+            visibleCount += 4; // 4개씩 더 보여줌
+            updateGallery(); // 화면 업데이트
+        });
+
+        // 실시간 검색 기능 (검색할 땐 더보기 무시하고 전체에서 찾음)
+        searchBar.addEventListener('input', function(e) {
+            const searchWord = e.target.value.toLowerCase();
+            
+            if (searchWord === '') {
+                // 검색어 다 지우면 원래 더보기 상태로 복구
+                updateGallery();
+            } else {
+                // 검색어가 있으면 더보기 버튼 숨기고 전체 카드에서 찾기
+                loadMoreContainer.style.display = 'none';
+                
+                cards.forEach(card => {
+                    const name = card.querySelector('h2').textContent.toLowerCase();
+                    const desc = card.querySelector('p').textContent.toLowerCase();
+                    
+                    if (name.includes(searchWord) || desc.includes(searchWord)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
