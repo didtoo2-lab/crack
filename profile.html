@@ -36,7 +36,7 @@
 <body>
 
     <nav class="top-nav">
-        <a href="index.html" class="back-btn">⟵ 라운지로 돌아가기</a>
+        <a href="./" class="back-btn">⟵ 돌아가기</a>
     </nav>
 
     <main class="content-box profile-section">
@@ -60,10 +60,10 @@
     <section class="content-box settings-section">
         <h2 class="section-title">⚙️ 캐릭터 챗 설정</h2>
         
-        <div class="setting-desc">시스템 프롬프트 (System Prompt)</div>
+        <div class="setting-desc">배경 설정 </div>
         <div class="setting-block" id="char-prompt"></div>
 
-        <div class="setting-desc">첫 인사말 (First Message)</div>
+        <div class="setting-desc">TMI </div>
         <div class="setting-block" id="char-firstmsg"></div>
     </section>
 
@@ -71,14 +71,14 @@
         // 1. 모든 캐릭터의 데이터를 여기에 깔끔하게 모아두는 거야!
         const characterData = {
             "1": {
-                title: "츤데레 암살자",
-                desc: "어두운 과거를 가진 츤데레 암살자",
-                name: "비공개",
-                age: "불명",
-                appearance: "한쪽 눈에 붕대, 성스러운 제복을 개조해서 입음. 머리카락에 뿔을 숨기고 다님.",
+                title: 부업하는 팀장님,
+                desc: "싸가지 없는 팀장님을 수상한 가게에서 발견했다?!",
+                name: "이준호",
+                age: "35",
+                appearance: "여기에 아직뭐가나오는지 모르겟음",
                 personality: "입은 험하지만 은근히 남을 챙겨주는 갭모에.",
-                prompt: "[이름; A; 나이; 불명; 직업; 암살자]\n[외형; 흑발, 붕대, 뿔 숨김]\n[성격; 까칠함, 방어적, 츤데레]",
-                firstmsg: "\"뭐야, 넌. 여기서 얼쩡거리지 말고 빨리 가버려.\""
+                prompt: "[이름; A; 나이; 불명; 직업; 암살자]\n[외형; 갈색머리, 갈색눈, 181cm]\n[성격; 까칠함, 능글, 사치]",
+                firstmsg: "\"왜 그렇게 돈을 쓰냐고? 부업하면 되잖아!\""
             },
             "2": {
                 title: "평화 펜션 관리인",
