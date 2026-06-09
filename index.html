@@ -205,6 +205,13 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(74, 123, 178, 0.4);
         }
+        /* 진짜 사진 넣었을 때 카드에 예쁘게 맞추는 마법의 코드! */
+.character-card img {
+    width: 100%;
+    aspect-ratio: 1080 / 1620;
+    object-fit: cover; /* 사진이 찌그러지지 않고 비율에 맞게 예쁘게 꽉 차게 잘림 */
+    display: block;
+}
     </style>
 </head>
 <body>
