@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>캐릭터 상세 프로필</title>
     <style>
-        /* [기본 스타일] 메인 페이지와 통일감을 주는 파스텔 블루 톤 */
+        /* 기본 스타일 */
         body { font-family: 'Pretendard', sans-serif; background-color: #f4f7fb; margin: 0; padding: 0; color: #333; }
         .top-nav { padding: 20px; max-width: 1000px; margin: 0 auto; }
         .back-btn { text-decoration: none; color: #4a7bb2; font-weight: bold; font-size: 1.1rem; display: inline-flex; align-items: center; transition: transform 0.2s; }
         .back-btn:hover { transform: translateX(-5px); }
 
-        /* [상자 스타일] 모든 정보 섹션은 하얀 박스 안에 넣음 */
+        /* 상자 스타일 */
         .content-box { max-width: 1000px; margin: 0 auto 40px auto; background-color: #ffffff; border-radius: 20px; box-shadow: 0 10px 30px rgba(74, 123, 178, 0.08); overflow: hidden; }
         
-        /* 1. 프로필 상단 영역 */
+        /* 프로필 상단 */
         .profile-section { display: flex; }
         .profile-image-box { flex: 0 0 40%; background-color: #eef2f6; position: relative; }
         .profile-image-box img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1080 / 1620; display: block; }
@@ -26,20 +26,19 @@
         .info-list .label { width: 100px; font-weight: 900; color: #4a7bb2; }
         .info-list .value { flex: 1; color: #475569; }
 
-        /* 2. 캐릭터 챗 설정 영역 */
+        /* 챗 설정 */
         .settings-section { padding: 40px; }
         .section-title { margin: 0 0 20px 0; font-size: 1.8rem; color: #334155; display: flex; align-items: center; gap: 10px; }
         .setting-block { background-color: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 12px; font-family: monospace; font-size: 1rem; line-height: 1.6; white-space: pre-wrap; margin-bottom: 20px; }
         .setting-desc { color: #64748b; margin-bottom: 10px; font-weight: bold; }
 
-        /* 3. 사진 갤러리 영역 */
+        /* 갤러리 */
         .gallery-section { padding: 40px; }
         .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .photo-item { border-radius: 12px; overflow: hidden; aspect-ratio: 1 / 1; }
         .photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
         .photo-item img:hover { transform: scale(1.1); }
 
-        /* [반응형] 모바일에서 세로로 정렬 */
         @media (max-width: 768px) {
             .profile-section { flex-direction: column; }
             .content-box { margin: 0 20px 30px 20px; }
@@ -49,7 +48,7 @@
 <body>
 
     <nav class="top-nav">
-        <a href="./" class="back-btn">⟵돌아가기</a>
+        <a href="./" class="back-btn">⟵ 돌아가기</a>
     </nav>
 
     <main class="content-box profile-section">
@@ -57,11 +56,11 @@
             </div>
         <div class="profile-info-box">
             <div class="profile-title">
-                <h1 id="char-title"></h1>
-                <p id="char-desc"></p>
+                <h1 id="char-title">데이터를 불러오는 중...</h1>
+                <p id="char-desc">잠시만 기다려주세요.</p>
             </div>
             <ul class="info-list" id="info-list-items">
-                </ul>
+            </ul>
         </div>
     </main>
 
@@ -76,20 +75,20 @@
     <section class="content-box gallery-section" id="gallery-container" style="display: none;">
         <h2 class="section-title">📸 추가 갤러리</h2>
         <div class="photo-grid" id="photo-grid-items">
-            </div>
+        </div>
     </section>
 
     <script>
-        // 📌 데이터 관리: 여기에 사진 리스트(gallery)를 추가했어!
+        // 📌 오타 하나 없이 깔끔하게 정리된 데이터베이스!
         const characterData = {
             "1": {
                 title: "츤데레 암살자",
                 desc: "어두운 과거를 가진 츤데레 암살자",
-                mainImg: "char1_main.jpg", // 메인 사진 파일명
+                mainImg: "char1_main.jpg",
                 info: { "이름": "비공개", "나이": "불명", "성격": "까칠함", "소속": "암살단" },
                 prompt: "[시스템 프롬프트 예시...]",
                 firstmsg: "거기, 누구야?",
-                gallery: ["char1_sub1.jpg", "char1_sub2.jpg", "char1_sub3.jpg"] // 갤러리 사진들
+                gallery: []
             },
             "2": {
                 title: "평화 펜션 관리인",
@@ -98,49 +97,51 @@
                 info: { "이름": "미상", "나이": "30대", "취미": "티타임" },
                 prompt: "[관리인 설정...]",
                 firstmsg: "어서 오세요.",
-                gallery: [] // 사진이 없으면 빈칸으로 두면 됨!
+                gallery: []
             },
             "12": {
                 title: "부업하는 팀장님",
                 desc: "싸가지 없는 팀장님을 수상한 가게에서 발견했다?!",
-                mainImg: "char2_main.jpg", //아직 이미지 안넣음
+                mainImg: "https://raw.githubusercontent.com/didtoo2-lab/imgS/refs/heads/main/부업하는팀장님.webp",
                 info: { "이름": "이준호", "나이": "35", "취미": "명품 쇼핑" },
                 prompt: "[관리인 설정...]",
                 firstmsg: "어서 오세요.",
                 gallery: [] 
             }
-            // 3, 4, 5... 계속 추가하면 돼!
         };
 
         const urlParams = new URLSearchParams(window.location.search);
         const charId = urlParams.get('id');
         const data = characterData[charId];
 
+        // 데이터가 무사히 잘 연결됐을 때 실행할 일들
         if (data) {
-            // 1. 텍스트 데이터 채우기
             document.getElementById('char-title').innerText = data.title;
             document.getElementById('char-desc').innerText = data.desc;
             document.getElementById('char-prompt').innerText = data.prompt;
             document.getElementById('char-firstmsg').innerText = data.firstmsg;
 
-            // 2. 기본 정보 리스트(info) 채우기
             const infoList = document.getElementById('info-list-items');
+            infoList.innerHTML = '';
             for (const [key, value] of Object.entries(data.info)) {
                 infoList.innerHTML += `<li><span class="label">${key}</span><span class="value">${value}</span></li>`;
             }
 
-            // 3. 메인 이미지 채우기
             const mainImgBox = document.getElementById('main-img-container');
             mainImgBox.innerHTML = `<img src="${data.mainImg}" alt="${data.title}">`;
 
-            // 4. 갤러리 사진 채우기 (사진이 있을 때만!)
             if (data.gallery && data.gallery.length > 0) {
                 document.getElementById('gallery-container').style.display = 'block';
                 const photoGrid = document.getElementById('photo-grid-items');
+                photoGrid.innerHTML = '';
                 data.gallery.forEach(imgName => {
                     photoGrid.innerHTML += `<div class="photo-item"><img src="${imgName}" alt="갤러리 사진"></div>`;
                 });
             }
+        } else {
+            // 주소창에 이상한 번호가 들어갔을 때 에러 띄워주기
+            document.getElementById('char-title').innerText = "오류 발생!";
+            document.getElementById('char-desc').innerText = "데이터를 찾을 수 없습니다. (id값을 확인하세요)";
         }
     </script>
 </body>
