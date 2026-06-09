@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캐릭터 상세 프로필</title>
+    <style>
+        /* CSS는 아까 썼던 상세 페이지랑 완전히 똑같아! 그대로 뒀어 */
+        body { font-family: 'Pretendard', sans-serif; background-color: #f4f7fb; margin: 0; padding: 0; color: #333; }
+        .top-nav { padding: 20px; max-width: 1000px; margin: 0 auto; }
+        .back-btn { text-decoration: none; color: #4a7bb2; font-weight: bold; font-size: 1.1rem; display: inline-flex; align-items: center; transition: transform 0.2s; }
+        .back-btn:hover { transform: translateX(-5px); }
+        .content-box { max-width: 1000px; margin: 0 auto 40px auto; background-color: #ffffff; border-radius: 20px; box-shadow: 0 10px 30px rgba(74, 123, 178, 0.08); overflow: hidden; }
+        .profile-section { display: flex; }
+        .profile-image-box { flex: 0 0 40%; background-color: #eef2f6; display: flex; align-items: center; justify-content: center; }
+        .profile-image-box img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1080 / 1620; display: block; }
+        .image-placeholder { width: 100%; aspect-ratio: 1080 / 1620; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-weight: bold; font-size: 1.5rem; }
+        .profile-info-box { flex: 1; padding: 50px 40px; }
+        .profile-title h1 { margin: 0 0 10px 0; font-size: 2.5rem; color: #334155; font-weight: 900; }
+        .profile-title p { margin: 0 0 30px 0; font-size: 1.2rem; color: #64748b; font-weight: bold; }
+        .info-list { list-style: none; padding: 0; margin: 0; border-top: 2px solid #e2e8f0; }
+        .info-list li { display: flex; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
+        .info-list .label { width: 100px; font-weight: 900; color: #4a7bb2; }
+        .info-list .value { flex: 1; color: #475569; }
+        .settings-section { padding: 40px; }
+        .section-title { margin: 0 0 20px 0; font-size: 1.8rem; color: #334155; display: flex; align-items: center; gap: 10px; }
+        .setting-block { background-color: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 12px; font-family: monospace; font-size: 1rem; line-height: 1.6; white-space: pre-wrap; margin-bottom: 20px; }
+        .setting-desc { color: #64748b; margin-bottom: 10px; font-weight: bold; }
+        @media (max-width: 768px) {
+            .profile-section { flex-direction: column; }
+            .profile-info-box, .settings-section { padding: 30px 20px; }
+            .content-box { margin: 0 20px 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="index.html" class="back-btn">⟵ 라운지로 돌아가기</a>
+    </nav>
+
+    <main class="content-box profile-section">
+        <div class="profile-image-box">
+            <div class="image-placeholder">메인 사진</div>
+        </div>
+        <div class="profile-info-box">
+            <div class="profile-title">
+                <h1 id="char-title">불러오는 중...</h1>
+                <p id="char-desc">데이터를 읽고 있습니다.</p>
+            </div>
+            <ul class="info-list">
+                <li><span class="label">이름</span><span class="value" id="char-name"></span></li>
+                <li><span class="label">나이</span><span class="value" id="char-age"></span></li>
+                <li><span class="label">외형</span><span class="value" id="char-appearance"></span></li>
+                <li><span class="label">성격</span><span class="value" id="char-personality"></span></li>
+            </ul>
+        </div>
+    </main>
+
+    <section class="content-box settings-section">
+        <h2 class="section-title">⚙️ 캐릭터 챗 설정</h2>
+        
+        <div class="setting-desc">시스템 프롬프트 (System Prompt)</div>
+        <div class="setting-block" id="char-prompt"></div>
+
+        <div class="setting-desc">첫 인사말 (First Message)</div>
+        <div class="setting-block" id="char-firstmsg"></div>
+    </section>
+
+    <script>
+        // 1. 모든 캐릭터의 데이터를 여기에 깔끔하게 모아두는 거야!
+        const characterData = {
+            "1": {
+                title: "츤데레 암살자",
+                desc: "어두운 과거를 가진 츤데레 암살자",
+                name: "비공개",
+                age: "불명",
+                appearance: "한쪽 눈에 붕대, 성스러운 제복을 개조해서 입음. 머리카락에 뿔을 숨기고 다님.",
+                personality: "입은 험하지만 은근히 남을 챙겨주는 갭모에.",
+                prompt: "[이름; A; 나이; 불명; 직업; 암살자]\n[외형; 흑발, 붕대, 뿔 숨김]\n[성격; 까칠함, 방어적, 츤데레]",
+                firstmsg: "\"뭐야, 넌. 여기서 얼쩡거리지 말고 빨리 가버려.\""
+            },
+            "2": {
+                title: "평화 펜션 관리인",
+                desc: "수상한 손님들을 맞이하는 사장님",
+                name: "미상",
+                age: "30대 추정",
+                appearance: "단정한 셔츠, 약간 피곤해 보이는 인상.",
+                personality: "친절하지만 어딘가 서늘한 구석이 있음.",
+                prompt: "[이름; 관리인; 나이; 30대; 직업; 펜션 사장]\n[성격; 친절함, 비밀스러움, 무심함]",
+                firstmsg: "\"평화 펜션에 오신 것을 환영합니다. 예약하신 분이시죠?\""
+            },
+            "3": {
+                title: "폐허 속 생존자",
+                desc: "포스트 아포칼립스 서울의 방랑자",
+                name: "제이",
+                age: "24",
+                appearance: "방독면을 목에 걸치고 낡은 가죽 재킷을 입음.",
+                personality: "경계심이 강하고 생존지향적, 냉철함.",
+                prompt: "[이름; 제이; 나이; 24; 직업; 스캐빈저]\n[소속; 서울 메트로 연방]\n[성격; 생존지향, 냉철함]",
+                firstmsg: "\"거기 멈춰. 더 이상 다가오면 쏜다.\""
+            }
+        };
+
+        // 2. 현재 인터넷 주소창에서 ?id= 몇 번인지 번호를 훔쳐(?)오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const charId = urlParams.get('id');
+
+        // 3. 훔쳐온 번호랑 똑같은 데이터를 우리 목록에서 찾기
+        const charInfo = characterData[charId];
+
+        // 4. 데이터가 있으면 화면 빈칸에 쏙쏙 글자 집어넣기!
+        if (charInfo) {
+            document.getElementById('char-title').innerText = charInfo.title;
+            document.getElementById('char-desc').innerText = charInfo.desc;
+            document.getElementById('char-name').innerText = charInfo.name;
+            document.getElementById('char-age').innerText = charInfo.age;
+            document.getElementById('char-appearance').innerText = charInfo.appearance;
+            document.getElementById('char-personality').innerText = charInfo.personality;
+            document.getElementById('char-prompt').innerText = charInfo.prompt;
+            document.getElementById('char-firstmsg').innerText = charInfo.firstmsg;
+        } else {
+            // 만약 없는 번호를 쳤으면 에러 메시지 띄우기
+            document.getElementById('char-title').innerText = "캐릭터를 찾을 수 없습니다.";
+            document.getElementById('char-desc').innerText = "올바른 경로로 접속해 주세요.";
+        }
+    </script>
+
+</body>
+</html>
