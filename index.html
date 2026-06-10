@@ -212,6 +212,26 @@
     object-fit: cover; /* 사진이 찌그러지지 않고 비율에 맞게 예쁘게 꽉 차게 잘림 */
     display: block;
 }
+/* --- 🔗 포스타입(외부 링크) 버튼 스타일 --- */
+        .external-link-btn {
+            display: inline-block;
+            background-color: #334155;
+            color: #ffffff;
+            padding: 12px 28px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 1.1rem;
+            margin-top: 25px;
+            box-shadow: 0 4px 12px rgba(51, 65, 85, 0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .external-link-btn:hover {
+            background-color: #4a7bb2;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(74, 123, 178, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -219,6 +239,7 @@
     <header class="site-header">
         <h1>✨ 마스의 다락방 ✨</h1>
         <p>기록 정리+보관용<br>상세 프로필+tmi+이미지 등을 확인할 수 있어요!</p>
+        <a href="https://www.postype.com/@christmas3" class="external-link-btn" target="_blank">🔗포스타입 놀러가기</a>
     </header>
 
     <div class="search-container">
